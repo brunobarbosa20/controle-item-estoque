@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7f4" />
+    <title>Controle de Estoque | Painel por item</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <a class="brand" href="#inicio" aria-label="Estoque a Granel - início">
+          <span class="brand-mark" aria-hidden="true">G</span>
+          <span class="brand-name">estoque<span>a granel</span></span>
+        </a>
+        <div class="sidebar-label">MENU</div>
+        <a class="nav-link active" href="#inicio"><span aria-hidden="true">▦</span> Visão geral</a>
+        <a class="nav-link" href="#novo-item"><span aria-hidden="true">＋</span> Cadastrar item</a>
+        <a class="nav-link" href="#movimentacao"><span aria-hidden="true">⇄</span> Movimentação</a>
+        <a class="nav-link" href="#atividades"><span aria-hidden="true">◷</span> Atividades</a>
+        <div class="sidebar-bottom">
+          <div class="connection-indicator"><span id="connection-dot" class="connection-dot"></span><span id="connection-label">Verificando conexão...</span></div>
+          <p>Controle de estoque<br />simples e transparente.</p>
+        </div>
+      </aside>
+
+      <main id="inicio" class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand"><span class="brand-mark" aria-hidden="true">G</span><span class="brand-name">estoque<span>a granel</span></span></div>
+          <div class="topbar-spacer"></div>
+          <div class="today-chip"><span aria-hidden="true">◷</span><span id="today-label"></span></div>
+        </header>
+
+        <section class="page-heading">
+          <div>
+            <p class="eyebrow">PAINEL DE CONTROLE</p>
+            <h1>Visão geral</h1>
+            <p class="subtitle">Acompanhe o saldo e as movimentações de todos os itens.</p>
+          </div>
+          <button id="open-entry-dialog" class="primary-button heading-button" type="button" disabled><span aria-hidden="true">＋</span> Dar entrada no estoque</button>
+        </section>
+
+        <section id="item-dashboards" class="item-dashboard-grid" aria-label="Painel de estoque por item">
+          <p class="table-state dashboard-state">Carregando painéis dos itens...</p>
+        </section>
+
+        <section id="novo-item" class="panel new-item-panel">
+          <div class="new-item-copy"><p class="eyebrow">CADASTRO</p><h2>Adicionar item ao estoque</h2><p class="panel-description">Informe uma descrição para criar um novo controle de estoque.</p></div>
+          <form id="item-form" class="item-form">
+            <div class="field-group item-description-group">
+                <label for="item-description">
+                Descrição do item <span class="required-mark">*</span>
+                </label>
+                <input
+                id="item-description"
+                name="descricao"
+                type="text"
+                maxlength="120"
+                placeholder="Ex.: Saco a granel, parafuso, uniforme..."
+                required
+                />
+            </div>
+
+            <div class="field-group item-unit-group">
+                <label for="item-unit">Unidade de Medida</label>
+                <select id="item-unit" required>
+                <option value="pacote">Pacote</option>
+                <option value="unidade">Unidade</option>
+                <option value="kg">KG</option>
+                </select>
+            </div>
+
+            <button id="item-submit-button" class="primary-button" type="submit">
+                <span aria-hidden="true">＋</span>
+                Cadastrar item
+            </button>
+            </form>
+          <div id="item-message" class="form-message" role="status" aria-live="polite" hidden></div>
+        </section>
+
+        <div class="content-grid">
+          <section id="movimentacao" class="panel movement-panel">
+            <div class="panel-heading">
+              <div><p class="eyebrow">ESTOQUE</p><h2>Registrar movimentação</h2></div>
+              <span class="panel-icon" aria-hidden="true">⇄</span>
+            </div>
+            <p class="panel-description">Informe os dados para manter o saldo atualizado.</p>
+            <form id="movement-form" novalidate>
+              <div class="field-group">
+                <label for="movement-item">Item <span class="required-mark">*</span></label>
+                <select id="movement-item" name="item_id" required disabled><option value="">Cadastre um item para começar</option></select>
+              </div>
+              <div class="field-group">
+                <label for="movement-type">Tipo de movimentação</label>
+                <select id="movement-type" name="tipo" required>
+                  <option value="saida">Retirada do estoque</option>
+                  <option value="entrada">Entrada no estoque</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="quantity">Quantidade <span class="required-mark">*</span></label>
+                  <div class="input-with-unit"><input id="quantity" name="quantidade" type="number" min="1" step="1" placeholder="Ex.: 5" required /><span>pacotes</span></div>
+                </div>
+                <div class="field-group">
+                  <label for="movement-date">Data <span class="required-mark">*</span></label>
+                  <input id="movement-date" name="data" type="date" required />
+                </div>
+              </div>
+              <div class="field-group">
+                <label for="department">Setor <span id="department-required" class="required-mark">*</span></label>
+                <input id="department" name="setor" type="text" maxlength="100" placeholder="Ex.: Produção" required />
+              </div>
+              <div class="field-group">
+                <label for="person-name">Nome de quem está registrando <span class="required-mark">*</span></label>
+                <input id="person-name" name="nome" type="text" maxlength="100" autocomplete="name" placeholder="Digite seu nome" required />
+              </div>
+              <div id="form-message" class="form-message" role="status" aria-live="polite" hidden></div>
+              <button id="submit-button" class="primary-button submit-button" type="submit"><span aria-hidden="true">＋</span> Registrar retirada</button>
+              <p class="form-footnote"><span aria-hidden="true">●</span> O saldo será atualizado automaticamente.</p>
+            </form>
+          </section>
+
+          <section id="atividades" class="panel activity-panel">
+            <div class="panel-heading activity-heading">
+              <div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Atividades recentes</h2></div>
+              <button id="refresh-button" class="icon-button" type="button" aria-label="Atualizar atividades" title="Atualizar">↻</button>
+            </div>
+            <p class="panel-description">Últimas movimentações registradas no estoque.</p>
+            <div class="activity-table-wrap">
+              <table class="activity-table">
+                <thead><tr><th>Movimentação</th><th>Item</th><th>Detalhes</th><th>Quantidade</th></tr></thead>
+                <tbody id="activity-list"><tr><td colspan="4" class="table-state">Carregando atividades...</td></tr></tbody>
+              </table>
+            </div>
+            <div class="activity-legend"><span><i class="legend-dot entry-dot"></i> Entrada</span><span><i class="legend-dot exit-dot"></i> Retirada</span></div>
+          </section>
+        </div>
+        <dialog id="entry-dialog" class="entry-dialog" aria-labelledby="entry-dialog-title">
+          <form id="entry-dialog-form" novalidate>
+            <div class="dialog-heading">
+              <div><p class="eyebrow">ENTRADA NO ESTOQUE</p><h2 id="entry-dialog-title">Adicionar saldo</h2></div>
+              <button id="close-entry-dialog" class="icon-button" type="button" aria-label="Fechar janela">×</button>
+            </div>
+            <p class="panel-description">Escolha o item e informe quantos pacotes estão entrando no estoque.</p>
+            <div class="field-group">
+              <label for="entry-item">Item</label>
+              <select id="entry-item" name="item_id" required></select>
+            </div>
+            <div class="current-balance"><span>Saldo atual</span><strong><span id="entry-current-balance">0</span> pacotes</strong></div>
+            <div class="field-group">
+              <label for="entry-quantity">Quantidade que está entrando <span class="required-mark">*</span></label>
+              <div class="input-with-unit"><input id="entry-quantity" name="quantidade" type="number" min="1" step="1" placeholder="Ex.: 5" required /><span>pacotes</span></div>
+            </div>
+            <div class="field-group">
+              <label for="entry-date">Data <span class="required-mark">*</span></label>
+              <input id="entry-date" name="data" type="date" required />
+            </div>
+            <div class="field-group">
+              <label for="entry-name">Nome de quem está registrando <span class="required-mark">*</span></label>
+              <input id="entry-name" name="nome" type="text" maxlength="100" autocomplete="name" placeholder="Digite seu nome" required />
+            </div>
+            <div id="entry-message" class="form-message" role="status" aria-live="polite" hidden></div>
+            <div class="dialog-actions">
+              <button id="cancel-entry-dialog" class="secondary-button" type="button">Cancelar</button>
+              <button id="entry-submit-button" class="primary-button" type="submit"><span aria-hidden="true">＋</span> Confirmar entrada</button>
+            </div>
+          </form>
+        </dialog>
+        <footer class="page-footer">Estoque a Granel <span>·</span> Controle compartilhado de movimentações</footer>
+      </main>
+    </div>
+  </body>
+</html>
