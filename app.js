@@ -251,7 +251,7 @@ function updateEntryBalance() {
   const selectedSummary = itemSummaries.find(
   (summary) => String(summary.item_id) === entryItemSelect.value
 );
-  entryCurrentBalance.textContent = formatQuantity(selectedSummary?.saldo_atual ?? 0);
+  entryCurrentBalance.textContent =`${formatQuantity(selectedSummary?.saldo_atual ?? 0)} ${selectedSummary?.unidade_medida ?? ""}`;
 }
 
 function setEntryMessage(message, type) {
