@@ -1,5 +1,5 @@
 import { isSupabaseConfigured, supabase } from "./supabase.js";
-
+console.log("VERSAO NOVA 15/10");
 const form = document.querySelector("#movement-form");
 const itemForm = document.querySelector("#item-form");
 const itemSelect = document.querySelector("#movement-item");
