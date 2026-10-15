@@ -187,7 +187,14 @@ function renderActivities(movements) {
     department.textContent = movement.setor || "Setor não informado";
     details.append(department);
     appendCell(row, "", details);
-    appendCell(row, `quantity-cell ${isEntry ? "entry" : "exit"}`, `${isEntry ? "+" : "−"}${formatQuantity(movement.quantidade)} pac.`);
+    console.log(movement.item);
+    const unidade = {
+      pacote: "pac.",
+      unidade: "un.",
+      kg: "kg"
+    };
+
+    appendCell(row, `quantity-cell ${isEntry ? "entry" : "exit"}`, `${isEntry ? "+" : "−"}${formatQuantity(movement.quantidade)} ${unidade[movement.item?.unidade_medida] ?? movement.item?.unidade_medida ?? ""}`);
     activityList.append(row);
   }
 }
@@ -199,7 +206,7 @@ async function loadDashboard() {
     supabase.rpc("resumo_estoque"),
     supabase
       .from("movimentacoes_estoque")
-      .select("id, tipo, quantidade, setor, nome, data_movimento, item:itens_estoque(descricao)")
+      .select("id, tipo, quantidade, setor, nome, data_movimento, item:itens_estoque(descricao, unidade_medida)")
       .order("data_movimento", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(10),
