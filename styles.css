@@ -226,3 +226,8 @@ input:disabled, select:disabled { background: #f6f7f6; }
 .item-description-group input {
   width: 100%;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    display: none;
+}
