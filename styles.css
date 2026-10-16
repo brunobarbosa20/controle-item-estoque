@@ -231,3 +231,9 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     display: none;
 }
+
+.brand-logo {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
