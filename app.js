@@ -475,6 +475,28 @@ document.querySelector("#refresh-button").addEventListener("click", async () => 
   }
 });
 
+  const logo = document.getElementById("brand-logo");
+  const preview = document.getElementById("logo-preview");
+
+  if (logo && preview) {
+    logo.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const rect = logo.getBoundingClientRect();
+
+      preview.style.left = `${rect.right + 10}px`;
+      preview.style.top = `${rect.top - 20}px`;
+
+      preview.classList.toggle("show");
+    });
+
+    document.addEventListener("click", () => {
+      preview.classList.remove("show");
+    });
+  }
+
+
 updateMovementForm();
 if (!isSupabaseConfigured) {
   setConnection(false, "Configure o Supabase");
